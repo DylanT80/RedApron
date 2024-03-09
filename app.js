@@ -35,4 +35,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+// Connect to DB
+const pool = require('./config/dbConnection');
+
 module.exports = app;
