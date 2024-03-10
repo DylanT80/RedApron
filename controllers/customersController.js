@@ -1,15 +1,5 @@
-const pool = require('../config/dbConnection');
-
-const { Client } = require('pg');
-
-// Retrieve RDS connection information from environment variables
-const dbConfig = {
-    user: 'postgres',
-    host: 'red-apron.cbwsykwgg8bi.us-west-2.rds.amazonaws.com',
-    database: 'redapron',
-    password: 'RedApron',
-    port: 5432
-};
+const { sendQuery } = require('../utility/queries');
+const { createCustomerQuery, deleteCustomerQuery } = require('../queries/customersQueries');
 
 /**
  * @description Create a customer
@@ -19,18 +9,34 @@ const dbConfig = {
 const createCustomer = async (req, res, next) => {
     // Assumes we have all fields, validated on client side
     const { firstName, lastName, email, phoneNumber, address, city, state } = req.body;
-
-    const client = new Client(dbConfig);
+    
     try {
-        await client.connect();
-        const output = await client.query('SELECT * FROM state');
-        res.send(output);
+        // const text = createCustomerQuery;
+        // const values = [firstName, lastName, email, phoneNumber, address, city, state];
+        // const output = await client.query(text, values);
+        const output = await sendQuery(createCustomerQuery, [firstName, lastName, email, phoneNumber, address, city, state]);
+        res.status(201).send(output.rows[0]);
     } catch (error) {
         console.error(error);
+        next(error);
     }
+}
 
+/**
+ * @description Create a customer
+ * @route DELETE /customers?email=_
+ * @public
+ */
+const deleteCustomer = async (req, res, next) => {
+    const { email } = req.query;
 
-    res.status(201).send('Customer created!');
+    try {
+        const output = await sendQuery(deleteCustomerQuery, [email]);
+        res.status(204).send(output.rows[0]);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
 }
 
 const getCustomerById = async (req, res, next) => {
@@ -40,5 +46,6 @@ const getCustomerById = async (req, res, next) => {
 
 module.exports = {
     createCustomer,
-    getCustomerById
+    getCustomerById,
+    deleteCustomer
 };
