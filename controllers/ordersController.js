@@ -87,10 +87,10 @@ const deleteOrder = async (req, res, next) => {
     }
 
     try {
-        // Delete order
-        await sendQuery(deleteOrderItemQuery, [ordernumber])
-        await sendQuery(deleteOrderQuery, [ordernumber]);
         // Delete order items
+        await sendQuery(deleteOrderItemQuery, [ordernumber])
+        // Delete order
+        await sendQuery(deleteOrderQuery, [ordernumber]);
         res.status(201).send('Deletion successful!');
     } catch (error) {
         console.error(error);

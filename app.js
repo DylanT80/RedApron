@@ -20,6 +20,8 @@ app.use('/', require('./routes/index'));
 app.use('/customers', require('./routes/customers'));
 app.use('/ingredients', require('./routes/ingredients'));
 app.use('/orders', require('./routes/orders'));
+app.use('/meals', require('./routes/meals'));
+app.use('/batch', require('./routes/batch'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
