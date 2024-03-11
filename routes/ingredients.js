@@ -1,5 +1,5 @@
 const express = require('express');
-const { createIngredient, getIngredient, updateIngredient, deleteIngredient, getExpiringIngredients } = require('../controllers/ingredientsController');
+const { createIngredient, getIngredient, updateIngredient, deleteIngredient, getExpiredIngredients } = require('../controllers/ingredientsController');
 
 const router = express.Router();
 
@@ -9,6 +9,6 @@ router.route('/')
     .put(updateIngredient)
     .delete(deleteIngredient);
 
-router.get('/HL/:id', getExpiringIngredients);
+router.get('/HL/:id', getExpiredIngredients);
 
 module.exports = router;

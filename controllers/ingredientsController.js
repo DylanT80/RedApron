@@ -1,7 +1,7 @@
 const { sendQuery, checkParams } = require('../utility/queries');
 const { format } = require('node-pg-format');
 const { createIngredientQuery, getIngredientQuery, updateIngredientQuery, deleteIngredientQuery } = require('../queries/ingredientsQueries');
-const { expiresTodayQuery } = require('../queries/highLevelQueries');
+const { expiredIngredientsQuery } = require('../queries/highLevelQueries');
 
 /**
  * @description Create an ingredient
@@ -94,14 +94,14 @@ const deleteIngredient = async (req, res, next) => {
 }
 
 /**
- * @description Get ingredients that are expiring today
+ * @description Get ingredients that are expired
  * @route GET /ingredients/HL/1
  * @public
  */
-const getExpiringIngredients = async (req, res, next) => {
+const getExpiredIngredients = async (req, res, next) => {
     try {
-        const output = await sendQuery(expiresTodayQuery, []);
-        res.status(201).send(output.rows[0]);
+        const output = await sendQuery(expiredIngredientsQuery, []);
+        res.status(201).send(output.rows);
     } catch (error) {
         console.log(error);
         next(error);
@@ -113,5 +113,5 @@ module.exports = {
     getIngredient,
     updateIngredient,
     deleteIngredient,
-    getExpiringIngredients
+    getExpiredIngredients
 }

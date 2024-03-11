@@ -1,5 +1,5 @@
 const express = require('express');
-const { createMeal, deleteMeal, updateMeal, getMeal } = require('../controllers/mealsController');
+const { createMeal, getMeal, updateMeal, deleteMeal, getPopularMeals } = require('../controllers/mealsController');
 
 const router = express.Router();
 
@@ -8,5 +8,7 @@ router.route('/')
     .get(getMeal)
     .put(updateMeal)
     .delete(deleteMeal);
+
+router.get('/HL/:id', getPopularMeals);
 
 module.exports = router;

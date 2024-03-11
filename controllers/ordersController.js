@@ -11,6 +11,7 @@ const {
     linkIngredientsQuery
 } = require('../queries/ordersQueries');
 const { getCustomerQuery, getCustomerPlanQuery } = require('../queries/customersQueries');
+const { listActiveOrders } = require('../queries/highLevelQueries');
 
 const createOrder = async (req, res, next) => {
     const { OrderNumber, Email, Items } = req.body;
@@ -121,9 +122,25 @@ const deleteOrder = async (req, res, next) => {
     }
 }
 
+/**
+ * @description Gets the order number and status of active orders
+ * @path GET /orders/HL/1
+ * @public
+ */
+const getActiveOrders = async (req, res, next) => {
+    try {
+        const output = await sendQuery(listActiveOrders, []);
+        res.status(201).send(output.rows);
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+}
+
 module.exports = {
     createOrder,
     getOrder,
     updateOrder,
-    deleteOrder
+    deleteOrder,
+    getActiveOrders
 }

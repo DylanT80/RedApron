@@ -1,24 +1,19 @@
-//Expiring ingredients
-const expiresTodayQuery = "SELECT Ingredient.name IngredientName, Batch.quantity \
-                      FROM Ingredient \
-                        JOIN BatchToIngredient ON (BatchToIngredient.IngredientID = Ingredient.id) \
-                        JOIN Batch ON (Batch.id = BatchToIngredient.batchID) \
-                      WHERE (SELECT CURRENT_DATE) > Batch.DeliveryDate + Ingredient.expiration \
-                      ORDER BY Batch.quantity";
+    //Expiring ingredients
+const expiredIngredientsQuery = "SELECT Ingredient.name IngredientName, BatchToIngredient.quantity \
+                                 FROM BatchToIngredient \
+                                  JOIN Ingredient ON Ingredient.ID = BatchToIngredient.IngredientID \
+                                  JOIN Batch ON Batch.id = BatchToIngredient.batchID \
+                                 WHERE (SELECT CURRENT_DATE) > Batch.DeliveryDate + Ingredient.expiration \
+                                 ORDER BY BatchToIngredient.quantity DESC";
 
 //Get the most popular meals given a specific interval (timeframe)
 const mostPopularMealsQuery = "SELECT M.name Name, SUM(OI.quantity) OrderedAmount \
-                               FROM OrderTable OT \
+                                FROM OrderTable OT \
                                     JOIN OrderItem OI ON OI.OrderID = OT.ID \
                                     JOIN MealKit M ON M.ID = OI.MealKitID \
-                               WHERE OT.OrderDate >= CURRENT_DATE - INTERVAL $1 \
-                               ORDER BY OrderedAmount DESC";
-        
-//Creates a new batch for recently delivered batches
-const createNewBatchQuery = "INSERT INTO Batch (BatchNumber, DeliveryDate, VendorID) \
-                             VALUES ($1, $2, (SELECT Vendor.id FROM Vendor WHERE Vendor.name = $3))";
-                            
-
+                                WHERE OT.OrderDate >= CURRENT_DATE - ($1)::INTERVAL \
+                                GROUP BY M.name \
+                                ORDER BY OrderedAmount DESC";
 
 //return customer info if their order contians a recalled ingredient
 const recall = "SELECT Customer.firstName, Customer.lastName, Customer.phoneNumber, Customer.email \
@@ -32,14 +27,14 @@ const recall = "SELECT Customer.firstName, Customer.lastName, Customer.phoneNumb
                 WHERE BatchToIngredient.BatchID = $1";
 
 
-//
-const listActiveOrder = "SELECT OrderTable.OrderNumber, OrderStatus.Name \
+//Gets the 
+const listActiveOrders = "SELECT OrderTable.OrderNumber, OrderStatus.Name \
                         FROM OrderTable \
                         JOIN OrderStatus ON (OrderStatus.ID = OrderTable.OrderStatus) \
                         WHERE OrderStatus.ID != 4 \
-                        ORDER BY OrderTable.OrderNumber, OrderStaus.Name";
+                        ORDER BY OrderTable.OrderNumber, OrderStatus.Name";
 
-const listFufilledOrder =   "SELECT OrderTable.OrderNumber, OrderStatus.Name \
+const listFufilledOrders =   "SELECT OrderTable.OrderNumber, OrderStatus.Name \
                             FROM OrderTable \
                             JOIN OrderStatus ON (OrderStatus.ID = OrderTable.OrderStatus) \
                             WHERE OrderStatus.ID = 4 \
@@ -51,14 +46,13 @@ const currentStock =    "SELECT i.Name, i.Expiration, i.CurrentAmount \
                         Order BY i.Expiration DESC";
 
 
-const weekGrossRevenue = "SELECT \
-                         ";
 
 
 module.exports = {
-    expiresTodayQuery,
+    expiredIngredientsQuery,
+    mostPopularMealsQuery,
     recall,
-    listActiveOrder,
-    listFufilledOrder,
+    listActiveOrders,
+    listFufilledOrders,
     currentStock
 }

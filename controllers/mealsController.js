@@ -8,6 +8,8 @@ const { createMealKitQuery,
         deleteMealKitQuery,
         deleteMealKitToIngredientQuery} = require('../queries/mealsQueries');
 
+const { mostPopularMealsQuery } = require('../queries/highLevelQueries');
+
 /**
  * @description Create a mealkit
  * @path POST /meals
@@ -116,9 +118,33 @@ const deleteMeal = async (req, res, next) => {
    }
 }
 
+/**
+ * @description Get list of popular meals ordered within specific timeframe
+ * @path GET /meals/HL/1?timeframe=_
+ * @public
+ */
+
+const getPopularMeals = async (req, res, next) => {
+   const { timeframe } = req.query;
+
+   if(checkParams([timeframe])) {
+      res.status(401).send('Params missing');
+      return;
+   }
+
+   try {
+      const output = await sendQuery(mostPopularMealsQuery, [timeframe]);
+      res.status(201).send(output.rows);
+   } catch (error) {
+      console.log(error);
+      next(error);
+   }
+}
+
 module.exports = {
     createMeal,
     getMeal,
     updateMeal,
-    deleteMeal
+    deleteMeal,
+    getPopularMeals
 }
