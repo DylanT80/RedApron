@@ -124,7 +124,7 @@ const deleteOrder = async (req, res, next) => {
 
 /**
  * @description Gets the order number and status of active orders
- * @path GET /orders/HL/1
+ * @route GET /orders/HL/1
  * @public
  */
 const getActiveOrders = async (req, res, next) => {

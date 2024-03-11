@@ -9,6 +9,7 @@ const {
     deleteBatchQuery,
     deleteBatchIngredientQuery
 } = require('../queries/batchQueries');
+const { getNumBatchesInIntervalQuery } = require('../queries/highLevelQueries');
 const { updateIngredientQuery, getIngredientQuery } = require('../queries/ingredientsQueries');
 
 const createBatch = async (req, res, next) => {
@@ -105,9 +106,27 @@ const deleteBatch = async (req, res, next) => {
     }
 }
 
+const getNumBatchesInInterval = async (req, res, next) => {
+    const { startDate, endDate } = req.query;
+
+    if (checkParams([startDate, endDate])) {
+        res.status(401).send('Params missing');
+        return;
+    }
+
+    try {
+        const output = await sendQuery(getNumBatchesInIntervalQuery, [startDate, endDate]);
+        res.status(200).send({ Count: output.rowCount, Batches: output.rows} );
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+}
+
 module.exports = {
     createBatch,
     getBatch,
     updateBatch,
-    deleteBatch
+    deleteBatch,
+    getNumBatchesInInterval
 }

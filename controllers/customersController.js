@@ -1,6 +1,7 @@
 const { sendQuery, checkParams } = require('../utility/queries');
 const { format } = require('node-pg-format');
 const { createCustomerQuery, getCustomerQuery, updateCustomerQuery, deleteCustomerQuery } = require('../queries/customersQueries');
+const { customersByState } = require('../queries/highLevelQueries');
 
 /**
  * @description Create a customer
@@ -92,9 +93,32 @@ const deleteCustomer = async (req, res, next) => {
     }
 }
 
+/**
+ * @description get all the customers by state
+ * @route GET /customers/HL/1?state=_
+ * @public
+ */
+const getCustomersByState = async (req, res, next) => {
+    const { state } = req.query;
+
+    if (checkParams([state])) {
+        res.status(401).send('Params missing');
+        return;
+    }
+
+    try {
+        const output = await sendQuery(customersByState, [state]);
+        res.status(201).send(output.rows);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+}
+
 module.exports = {
     createCustomer,
     getCustomer,
     updateCustomer,
-    deleteCustomer
+    deleteCustomer,
+    getCustomersByState
 };

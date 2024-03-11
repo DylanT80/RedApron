@@ -12,7 +12,7 @@ const { mostPopularMealsQuery } = require('../queries/highLevelQueries');
 
 /**
  * @description Create a mealkit
- * @path POST /meals
+ * @route POST /meals
  * @public
  */
 const createMeal = async (req, res, next) => {
@@ -43,7 +43,7 @@ const createMeal = async (req, res, next) => {
 
 /**
  * @description Get a mealkit
- * @path GET /meals?sku=_
+ * @route GET /meals?sku=_
  * @public
  */
 const getMeal = async (req, res, next) => {
@@ -72,7 +72,7 @@ const getMeal = async (req, res, next) => {
 
 /**
  * @description updates a mealkit
- * @path PUT /meals?column=_&value=_&sku=_
+ * @route PUT /meals?column=_&value=_&sku=_
  * @public
  */
 const updateMeal = async (req, res, next) => {
@@ -95,7 +95,7 @@ const updateMeal = async (req, res, next) => {
 
 /**
  * @description deletes a mealkit
- * @path DELETE /meals?sku=_
+ * @route DELETE /meals?sku=_
  * @public
  */
 const deleteMeal = async (req, res, next) => {
@@ -120,7 +120,7 @@ const deleteMeal = async (req, res, next) => {
 
 /**
  * @description Get list of popular meals ordered within specific timeframe
- * @path GET /meals/HL/1?timeframe=_
+ * @route GET /meals/HL/1?timeframe=_
  * @public
  */
 

@@ -1,5 +1,5 @@
 const express = require('express');
-const { createCustomer, getCustomer, updateCustomer, deleteCustomer } = require('../controllers/customersController');
+const { createCustomer, getCustomer, updateCustomer, deleteCustomer, getCustomersByState } = require('../controllers/customersController');
 
 const router = express.Router();
 
@@ -8,5 +8,7 @@ router.route('/')
     .get(getCustomer)
     .put(updateCustomer)
     .delete(deleteCustomer);
+
+router.get('/HL/:id', getCustomersByState);
 
 module.exports = router;
