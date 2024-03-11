@@ -13,7 +13,9 @@ const mostPopularMealsQuery = "SELECT M.name Name, SUM(OI.quantity) OrderedAmoun
                                     JOIN MealKit M ON M.ID = OI.MealKitID \
                                 WHERE OT.OrderDate >= CURRENT_DATE - ($1)::INTERVAL \
                                 GROUP BY M.name \
-                                ORDER BY OrderedAmount DESC";
+                                ORDER BY OrderedAmount DESC \
+                                LIMIT $2;"
+                                
 
 // return customer info if their order contains a recalled ingredient
 const recall = "SELECT Customer.firstName, Customer.lastName, Customer.phoneNumber, Customer.email \

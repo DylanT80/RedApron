@@ -120,20 +120,20 @@ const deleteMeal = async (req, res, next) => {
 
 /**
  * @description Get list of popular meals ordered within specific timeframe
- * @route GET /meals/HL/1?timeframe=_
+ * @route GET /meals/HL/1?timeframe=_&limit=_
  * @public
  */
 
 const getPopularMeals = async (req, res, next) => {
-   const { timeframe } = req.query;
+   const { timeframe, limit } = req.query;
 
-   if(checkParams([timeframe])) {
+   if(checkParams([timeframe, limit])) {
       res.status(401).send('Params missing');
       return;
    }
 
    try {
-      const output = await sendQuery(mostPopularMealsQuery, [timeframe]);
+      const output = await sendQuery(mostPopularMealsQuery, [timeframe, limit]);
       res.status(201).send(output.rows);
    } catch (error) {
       console.log(error);
