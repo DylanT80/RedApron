@@ -1,7 +1,7 @@
 const { sendQuery, checkParams } = require('../utility/queries');
 const { format } = require('node-pg-format');
 const { createCustomerQuery, getCustomerQuery, updateCustomerQuery, deleteCustomerQuery } = require('../queries/customersQueries');
-const { customersByState } = require('../queries/highLevelQueries');
+const { customersByState, getAllCustomersQuery } = require('../queries/highLevelQueries');
 
 /**
  * @description Create a customer
@@ -42,6 +42,16 @@ const getCustomer = async (req, res, next) => {
     try {
         const output = await sendQuery(getCustomerQuery, [email]);
         res.status(200).send(output.rows[0]);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+}
+
+const getAllCustomers = async (req, res, next) => {
+    try {
+        const output = await sendQuery(getAllCustomersQuery, []);
+        res.status(200).send(output.rows);
     } catch (error) {
         console.error(error);
         next(error);
@@ -120,5 +130,6 @@ module.exports = {
     getCustomer,
     updateCustomer,
     deleteCustomer,
-    getCustomersByState
+    getCustomersByState,
+    getAllCustomers
 };

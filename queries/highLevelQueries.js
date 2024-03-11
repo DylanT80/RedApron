@@ -54,6 +54,9 @@ const customersByState = "SELECT * FROM Customer WHERE StateID = $1";
 // Number of batches in given time interval
 const getNumBatchesInIntervalQuery = "SELECT * FROM Batch WHERE DeliveryDate >= $1 AND DeliveryDate <= $2";
 
+// Get all customers
+const getAllCustomersQuery = "SELECT * FROM Customer";
+
 module.exports = {
     expiredIngredientsQuery,
     mostPopularMealsQuery,
@@ -62,5 +65,6 @@ module.exports = {
     listFufilledOrders,
     currentStock,
     customersByState,
-    getNumBatchesInIntervalQuery
+    getNumBatchesInIntervalQuery,
+    getAllCustomersQuery
 }
