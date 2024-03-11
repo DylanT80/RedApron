@@ -4,6 +4,8 @@ const createBatchIngredientQuery = "INSERT INTO BatchToIngredient(IngredientID, 
 const getBatchQuery = "SELECT * FROM Batch WHERE id = (SELECT id FROM Batch WHERE BatchNumber = $1)";
 const getBatchIngredientQuery = "SELECT (SELECT name FROM Ingredient WHERE id = ingredientid), quantity FROM BatchToIngredient WHERE batchid = (SELECT id FROM Batch WHERE batchnumber = $1)";
 
+const updateBatchQuery = "UPDATE Batch SET %s = $1 WHERE id = (SELECT id FROM Batch WHERE BatchNumber = $2) RETURNING *";
+
 const deleteBatchQuery = "DELETE FROM Batch WHERE id = (SELECT id FROM Batch WHERE BatchNumber = $1)";
 const deleteBatchIngredientQuery = "DELETE FROM BatchToIngredient WHERE BatchID = (SELECT id FROM Batch WHERE BatchNumber = $1)";
 
@@ -12,6 +14,7 @@ module.exports = {
     createBatchIngredientQuery,
     getBatchQuery,
     getBatchIngredientQuery,
+    updateBatchQuery,
     deleteBatchQuery,
     deleteBatchIngredientQuery
 }

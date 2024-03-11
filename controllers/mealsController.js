@@ -5,7 +5,8 @@ const { createMealKitQuery,
         getMealKitQuery,
         getMealKitIngredientsQuery,
         updateMealKitQuery,
-        deleteMealKitQuery} = require('../queries/mealsQueries');
+        deleteMealKitQuery,
+        deleteMealKitToIngredientQuery} = require('../queries/mealsQueries');
 
 /**
  * @description Create a mealkit
@@ -60,7 +61,7 @@ const getMeal = async (req, res, next) => {
          output['Ingredients'] = [...output['Ingredients'], row];
      });
       
-      res.status(200).send(MealKit.rows[0]);
+      res.status(200).send(output);
    } catch (error) {
       console.log(error);
       next(error);
@@ -104,6 +105,9 @@ const deleteMeal = async (req, res, next) => {
    }
    
    try {
+      //Delete the ingredients
+      await sendQuery(deleteMealKitToIngredientQuery, [sku]);
+      //Delete the meal kit
       await sendQuery(deleteMealKitQuery, [sku]);
       res.status(200).send('Deletion successful!');
    } catch (error) {

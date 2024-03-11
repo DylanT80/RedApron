@@ -5,6 +5,7 @@ const {
     createBatchIngredientQuery,
     getBatchQuery,
     getBatchIngredientQuery,
+    updateBatchQuery,
     deleteBatchQuery,
     deleteBatchIngredientQuery
 } = require('../queries/batchQueries');
@@ -59,6 +60,24 @@ const getBatch = async (req, res, next) => {
     }
 }
 
+const updateBatch = async (req, res, next) => {
+    const { column, value, batchnumber } = req.query;
+
+    if (checkParams([column, value, batchnumber])) {
+        res.status(401).send('Params missing');
+        return;
+    }
+
+    const formattedQuery = format(updateBatchQuery, column);
+    try {
+        const output = await sendQuery(formattedQuery, [value, batchnumber]);
+        res.status(200).send(output.rows[0]);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+}
+
 const deleteBatch = async (req, res, next) => {
     const { batchnumber } = req.query;
 
@@ -69,9 +88,9 @@ const deleteBatch = async (req, res, next) => {
 
     try {
         // Delete order
-        await sendQuery(deleteBatchIngredientQuery, [ordernumber])
+        await sendQuery(deleteBatchIngredientQuery, [batchnumber])
         // Delete order items
-        await sendQuery(deleteBatchQuery, [ordernumber]);
+        await sendQuery(deleteBatchQuery, [batchnumber]);
         res.status(201).send('Deletion successful!');
     } catch (error) {
         console.error(error);
@@ -81,5 +100,7 @@ const deleteBatch = async (req, res, next) => {
 
 module.exports = {
     createBatch,
-    getBatch
+    getBatch,
+    updateBatch,
+    deleteBatch
 }
