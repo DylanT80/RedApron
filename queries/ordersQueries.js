@@ -8,6 +8,15 @@ const getOrderItemQuery = "SELECT (SELECT sku FROM MealKit WHERE id = mealkitid)
 const deleteOrderQuery = "DELETE FROM OrderTable WHERE id = (SELECT id FROM OrderTable WHERE OrderNumber = $1)";
 const deleteOrderItemQuery = "DELETE FROM OrderItem WHERE OrderID = (SELECT id FROM OrderTable WHERE OrderNumber = $1)";
 
+const linkIngredientsQuery = "\
+    SELECT Ingredient.name, MealKitToIngredient.quantity, Ingredient.currentamount \
+    FROM MealKit \
+        JOIN MealKitToIngredient ON (MealKitToIngredient.MealKitID = MealKit.id) \
+        JOIN Ingredient ON (Ingredient.id = MealKitToIngredient.IngredientID) \
+    WHERE Mealkit.sku = $1 \
+";
+
+
 
 module.exports = {
     createOrderQuery,
@@ -16,5 +25,6 @@ module.exports = {
     getOrderItemQuery,
     updateOrderQuery,
     deleteOrderQuery,
-    deleteOrderItemQuery
+    deleteOrderItemQuery,
+    linkIngredientsQuery,
 }

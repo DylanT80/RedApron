@@ -9,6 +9,7 @@ const {
     deleteBatchQuery,
     deleteBatchIngredientQuery
 } = require('../queries/batchQueries');
+const { updateIngredientQuery, getIngredientQuery } = require('../queries/ingredientsQueries');
 
 const createBatch = async (req, res, next) => {
     const { BatchNumber, VendorName, Items } = req.body;
@@ -27,6 +28,12 @@ const createBatch = async (req, res, next) => {
         Items.forEach(async (item) => {
             const IngredientName = Object.keys(item)[0];
             const Quantity = item[IngredientName];
+            
+            // Update stock count of ingredients
+            const ingredient = await sendQuery(getIngredientQuery, [IngredientName]);
+            const formattedQuery = format(updateIngredientQuery, 'CurrentAmount');
+            await sendQuery(formattedQuery, [ingredient.rows[0]['currentamount'] + Quantity, IngredientName]);
+
             await sendQuery(createBatchIngredientQuery, [IngredientName, BatchID, Quantity]);
         });
 

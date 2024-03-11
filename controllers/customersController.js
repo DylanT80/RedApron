@@ -9,15 +9,15 @@ const { createCustomerQuery, getCustomerQuery, updateCustomerQuery, deleteCustom
  */
 const createCustomer = async (req, res, next) => {
     // Assumes we have all fields, validated on client side
-    const { firstName, lastName, email, phoneNumber, address, city, state } = req.body;
+    const { firstName, lastName, email, phoneNumber, address, city, state, plan } = req.body;
     
-    if (checkParams([firstName, lastName, email, phoneNumber, address, city, state])) {
+    if (checkParams([firstName, lastName, email, phoneNumber, address, city, state, plan])) {
         res.status(401).send('Params missing');
         return;
     }
 
     try {
-        const output = await sendQuery(createCustomerQuery, [firstName, lastName, email, phoneNumber, address, city, state]);
+        const output = await sendQuery(createCustomerQuery, [firstName, lastName, email, phoneNumber, address, city, state, plan]);
         res.status(201).send(output.rows[0]);
     } catch (error) {
         console.error(error);

@@ -9,4 +9,5 @@ router.route('/')
     .put(updateOrder)
     .delete(deleteOrder);
 
+router.route('/HL/:id');
 module.exports = router;
