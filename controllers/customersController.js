@@ -6,6 +6,7 @@ const { customersByState, getAllCustomersQuery } = require('../queries/highLevel
 /**
  * @description Create a customer
  * @route POST /customers
+ * @author Aman
  * @public
  */
 const createCustomer = async (req, res, next) => {
@@ -29,6 +30,7 @@ const createCustomer = async (req, res, next) => {
 /**
  * @description Get a customer
  * @route GET /customers?email=_
+ * @author Aman
  * @public
  */
 const getCustomer = async (req, res, next) => {
@@ -48,6 +50,12 @@ const getCustomer = async (req, res, next) => {
     }
 }
 
+/**
+ * @description Get all customers
+ * @route GET /customers/all
+ * @author Aman
+ * @public
+ */
 const getAllCustomers = async (req, res, next) => {
     try {
         const output = await sendQuery(getAllCustomersQuery, []);
@@ -61,6 +69,7 @@ const getAllCustomers = async (req, res, next) => {
 /**
  * @description Update a customer
  * @route PUT /customers?column=_&value=_&email=_
+ * @author Aman
  * @public
  */
 const updateCustomer = async (req, res, next) => {
@@ -84,6 +93,7 @@ const updateCustomer = async (req, res, next) => {
 /**
  * @description Create a customer
  * @route DELETE /customers?email=_
+ * @author Aman
  * @public
  */
 const deleteCustomer = async (req, res, next) => {
@@ -106,6 +116,7 @@ const deleteCustomer = async (req, res, next) => {
 /**
  * @description get all the customers by state
  * @route GET /customers/HL/1?state=_
+ * @author Aman
  * @public
  */
 const getCustomersByState = async (req, res, next) => {

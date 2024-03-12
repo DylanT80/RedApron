@@ -6,6 +6,7 @@ const { expiredIngredientsQuery } = require('../queries/highLevelQueries');
 /**
  * @description Create an ingredient
  * @route POST /ingredients
+ * @author Sutantu
  * @public
  */
 const createIngredient = async (req, res, next) => {
@@ -29,6 +30,7 @@ const createIngredient = async (req, res, next) => {
 /**
  * @description Get an ingedient
  * @route GET /ingredients?name=_
+ * @author Sutantu
  * @public
  */
 const getIngredient = async (req, res, next) => {
@@ -51,6 +53,7 @@ const getIngredient = async (req, res, next) => {
 /**
  * @description Update an ingredient
  * @route PUT /ingredients?column=_&value=_&name=_
+ * @author Sutantu
  * @public
  */
 const updateIngredient = async (req, res, next) => {
@@ -74,6 +77,7 @@ const updateIngredient = async (req, res, next) => {
 /**
  * @description Delete an ingredient
  * @route DELETE /ingredients?name=_
+ * @author Sutantu
  * @public
  */
 const deleteIngredient = async (req, res, next) => {
@@ -96,6 +100,7 @@ const deleteIngredient = async (req, res, next) => {
 /**
  * @description Get ingredients that are expired
  * @route GET /ingredients/HL/1
+ * @author Sutantu
  * @public
  */
 const getExpiredIngredients = async (req, res, next) => {
@@ -111,6 +116,7 @@ const getExpiredIngredients = async (req, res, next) => {
 /**
  * @description Get list of all ingredients
  * @route GET /ingredients/all
+ * @author Sutantu
  * @public
  */
 const getAllIngredients = async (req, res, next) => {

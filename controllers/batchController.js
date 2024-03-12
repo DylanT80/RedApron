@@ -17,7 +17,7 @@ const { updateIngredientQuery, getIngredientQuery } = require('../queries/ingred
  * @description Create a batch
  * @route POST /batch
  * @public
- * @author Dylan Tran
+ * @author Dylan
  */
 const createBatch = async (req, res, next) => {
     const { BatchNumber, VendorName, Items } = req.body;
@@ -56,7 +56,7 @@ const createBatch = async (req, res, next) => {
  * @description Get a batch
  * @route GET /batch
  * @public
- * @author Dylan Tran
+ * @author Dylan
  */
 const getBatch = async (req, res, next) => {
     const { batchnumber } = req.query;
@@ -85,7 +85,7 @@ const getBatch = async (req, res, next) => {
  * @description Get list of all batches (get batch history)
  * @route GET /batch/all
  * @public
- * @author Dylan Tran
+ * @author Dylan
  */
 const getAllBatches = async (req, res, next) => {
     try {
@@ -101,7 +101,7 @@ const getAllBatches = async (req, res, next) => {
  * @description Update a batch
  * @route PUT /batch
  * @public
- * @author Dylan Tran
+ * @author Dylan
  */
 const updateBatch = async (req, res, next) => {
     const { column, value, batchnumber } = req.query;
@@ -125,7 +125,7 @@ const updateBatch = async (req, res, next) => {
  * @description Delete a batch
  * @route DELETE /batch
  * @public
- * @author Dylan Tran
+ * @author Dylan
  */
 const deleteBatch = async (req, res, next) => {
     const { batchnumber } = req.query;
@@ -151,7 +151,7 @@ const deleteBatch = async (req, res, next) => {
  * @description Get all batches
  * @route GET /batch/all
  * @public
- * @author Dylan Tran
+ * @author Dylan
  */
 const getNumBatchesInInterval = async (req, res, next) => {
     const { startDate, endDate } = req.query;

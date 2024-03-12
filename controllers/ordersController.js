@@ -14,6 +14,12 @@ const {
 const { getCustomerQuery, getCustomerPlanQuery } = require('../queries/customersQueries');
 const { listActiveOrders } = require('../queries/highLevelQueries');
 
+/**
+ * @description Create an order
+ * @route POST /orders
+ * @author Dylan
+ * @public
+ */
 const createOrder = async (req, res, next) => {
     const { OrderNumber, Email, Items } = req.body;
 
@@ -62,6 +68,12 @@ const createOrder = async (req, res, next) => {
     }
 }
 
+/**
+ * @description Get an order
+ * @route GET /orders
+ * @author Sutantu
+ * @public
+ */
 const getOrder = async (req, res, next) => {
     const { ordernumber } = req.query;
 
@@ -88,6 +100,7 @@ const getOrder = async (req, res, next) => {
 /**
  * @description Gets all orders
  * @route /orders/all
+ * @author Sutantu
  * @public
  */
 const getAllOrders = async (req, res, next) => {
@@ -100,6 +113,12 @@ const getAllOrders = async (req, res, next) => {
     }
 }
 
+/**
+ * @description Update an order
+ * @route PUT /orders
+ * @author Aman
+ * @public
+ */
 const updateOrder = async (req, res, next) => {
     const { column, value, ordernumber } = req.query;
 
@@ -118,6 +137,12 @@ const updateOrder = async (req, res, next) => {
     }
 }
 
+/**
+ * @description Delete an order
+ * @route DELETE /orders
+ * @author Thaddeus
+ * @public
+ */
 const deleteOrder = async (req, res, next) => {
     const { ordernumber } = req.query;
 
@@ -141,6 +166,7 @@ const deleteOrder = async (req, res, next) => {
 /**
  * @description Gets the order number and status of active orders
  * @route GET /orders/HL/1
+ * @author Dylan
  * @public
  */
 const getActiveOrders = async (req, res, next) => {
