@@ -1,13 +1,14 @@
 const { sendQuery, checkParams } = require('../utility/queries');
 const { format } = require('node-pg-format');
-const { 
-    createOrderQuery, 
+const {
+    createOrderQuery,
     createOrderItemQuery,
     getOrderQuery,
     getOrderItemQuery,
-    updateOrderQuery, 
-    deleteOrderQuery, 
-    deleteOrderItemQuery, 
+    getAllOrdersQuery,
+    updateOrderQuery,
+    deleteOrderQuery,
+    deleteOrderItemQuery,
     linkIngredientsQuery
 } = require('../queries/ordersQueries');
 const { getCustomerQuery, getCustomerPlanQuery } = require('../queries/customersQueries');
@@ -15,7 +16,7 @@ const { listActiveOrders } = require('../queries/highLevelQueries');
 
 const createOrder = async (req, res, next) => {
     const { OrderNumber, Email, Items } = req.body;
-    
+
     if (checkParams([OrderNumber, Email, Items])) {
         res.status(401).send('Params missing');
         return;
@@ -42,7 +43,7 @@ const createOrder = async (req, res, next) => {
                     res.status(200).send('Out of stock!');
                     return;
                 }
-                
+
                 // Update stock number
                 const newAmount = currentAmount - amountNeeded;
                 const query = "UPDATE Ingredient SET currentamount = $1 WHERE Ingredient.name = $2";
@@ -80,6 +81,21 @@ const getOrder = async (req, res, next) => {
         res.status(200).send(output);
     } catch (error) {
         console.error(error);
+        next(error);
+    }
+}
+
+/**
+ * @description Gets all orders
+ * @route /orders/all
+ * @public
+ */
+const getAllOrders = async (req, res, next) => {
+    try {
+        const output = await sendQuery(getAllOrdersQuery, []);
+        res.status(201).send(output.rows);
+    } catch (error) {
+        console.log(error);
         next(error);
     }
 }
@@ -140,6 +156,7 @@ const getActiveOrders = async (req, res, next) => {
 module.exports = {
     createOrder,
     getOrder,
+    getAllOrders,
     updateOrder,
     deleteOrder,
     getActiveOrders

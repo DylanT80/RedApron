@@ -1,5 +1,5 @@
 const express = require('express');
-const { createOrder, deleteOrder, updateOrder, getOrder, getActiveOrders } = require('../controllers/ordersController');
+const { createOrder, deleteOrder, updateOrder, getOrder, getActiveOrders, getAllOrders } = require('../controllers/ordersController');
 
 const router = express.Router();
 
@@ -10,5 +10,6 @@ router.route('/')
     .delete(deleteOrder);
 
 router.get('/HL/:id', getActiveOrders);
+router.get('/all', getAllOrders)
 
 module.exports = router;

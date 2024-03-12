@@ -1,6 +1,6 @@
 const { sendQuery, checkParams } = require('../utility/queries');
 const { format } = require('node-pg-format');
-const { createIngredientQuery, getIngredientQuery, updateIngredientQuery, deleteIngredientQuery } = require('../queries/ingredientsQueries');
+const { createIngredientQuery, getIngredientQuery, updateIngredientQuery, deleteIngredientQuery, getAllIngredientQuery } = require('../queries/ingredientsQueries');
 const { expiredIngredientsQuery } = require('../queries/highLevelQueries');
 
 /**
@@ -9,10 +9,10 @@ const { expiredIngredientsQuery } = require('../queries/highLevelQueries');
  * @public
  */
 const createIngredient = async (req, res, next) => {
-       // Assumes we have all fields, validated on client side
-       const { Name, Expiration, CurrentAmount, MinimumAmount } = req.body;
+    // Assumes we have all fields, validated on client side
+    const { Name, Expiration, CurrentAmount, MinimumAmount } = req.body;
 
-       if (checkParams([Name, Expiration, CurrentAmount, MinimumAmount])) {
+    if (checkParams([Name, Expiration, CurrentAmount, MinimumAmount])) {
         res.status(401).send('Params missing');
         return;
     }
@@ -33,15 +33,15 @@ const createIngredient = async (req, res, next) => {
  */
 const getIngredient = async (req, res, next) => {
     const { name } = req.query;
-    
-    if(checkParams([name])){
+
+    if (checkParams([name])) {
         res.status(401).send('Params missing');
         return;
     }
 
     try {
         const output = await sendQuery(getIngredientQuery, [name]);
-        res.status(201).send(output.rows[0]); 
+        res.status(201).send(output.rows[0]);
     } catch (error) {
         console.error(error);
         next(error);
@@ -53,8 +53,8 @@ const getIngredient = async (req, res, next) => {
  * @route PUT /ingredients?column=_&value=_&name=_
  * @public
  */
-const updateIngredient = async(req, res, next) => {
-    const {column, value, name} = req.query;
+const updateIngredient = async (req, res, next) => {
+    const { column, value, name } = req.query;
 
     if (checkParams([column, value, name])) {
         res.status(401).send('Params missing');
@@ -108,10 +108,26 @@ const getExpiredIngredients = async (req, res, next) => {
     }
 }
 
+/**
+ * @description Get list of all ingredients
+ * @route GET /ingredients/all
+ * @public
+ */
+const getAllIngredients = async (req, res, next) => {
+    try {
+        const output = await sendQuery(getAllIngredientQuery, []);
+        res.status(201).send(output.rows);
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+}
+
 module.exports = {
     createIngredient,
     getIngredient,
     updateIngredient,
     deleteIngredient,
-    getExpiredIngredients
+    getExpiredIngredients,
+    getAllIngredients
 }

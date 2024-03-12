@@ -1,12 +1,13 @@
 const { sendQuery, checkParams } = require('../utility/queries');
 const { format } = require('node-pg-format');
-const { createMealKitQuery, 
-        createMealKitToIngredientQuery,
-        getMealKitQuery,
-        getMealKitIngredientsQuery,
-        updateMealKitQuery,
-        deleteMealKitQuery,
-        deleteMealKitToIngredientQuery} = require('../queries/mealsQueries');
+const { createMealKitQuery,
+   createMealKitToIngredientQuery,
+   getMealKitQuery,
+   getMealKitIngredientsQuery,
+   getAllMealKitQuery,
+   updateMealKitQuery,
+   deleteMealKitQuery,
+   deleteMealKitToIngredientQuery } = require('../queries/mealsQueries');
 
 const { mostPopularMealsQuery } = require('../queries/highLevelQueries');
 
@@ -49,7 +50,7 @@ const createMeal = async (req, res, next) => {
 const getMeal = async (req, res, next) => {
    const { sku } = req.query;
 
-   if(checkParams([sku])) {
+   if (checkParams([sku])) {
       res.status(401).send('Params missing');
       return;
    }
@@ -61,9 +62,24 @@ const getMeal = async (req, res, next) => {
       const output = { MealKit: MealKit.rows[0], Ingredients: [] };
       MealKitIngredients.rows.forEach(row => {
          output['Ingredients'] = [...output['Ingredients'], row];
-     });
-      
+      });
+
       res.status(200).send(output);
+   } catch (error) {
+      console.log(error);
+      next(error);
+   }
+}
+
+/**
+ * @description gets list of all mealkits
+ * @route GET meals/all
+ * @public
+ */
+const getAllMealKits = async (req, res, next) => {
+   try {
+      const output = await sendQuery(getAllMealKitQuery, []);
+      res.status(200).send(output.rows);
    } catch (error) {
       console.log(error);
       next(error);
@@ -78,7 +94,7 @@ const getMeal = async (req, res, next) => {
 const updateMeal = async (req, res, next) => {
    const { column, value, sku } = req.query;
 
-   if(checkParams([column, value, sku])) {
+   if (checkParams([column, value, sku])) {
       res.status(401).send('Params missing');
       return;
    }
@@ -101,11 +117,11 @@ const updateMeal = async (req, res, next) => {
 const deleteMeal = async (req, res, next) => {
    const { sku } = req.query;
 
-   if(checkParams([sku])) {
+   if (checkParams([sku])) {
       res.status(401).send('Params missing');
       return;
    }
-   
+
    try {
       //Delete the ingredients
       await sendQuery(deleteMealKitToIngredientQuery, [sku]);
@@ -127,7 +143,7 @@ const deleteMeal = async (req, res, next) => {
 const getPopularMeals = async (req, res, next) => {
    const { timeframe, limit } = req.query;
 
-   if(checkParams([timeframe, limit])) {
+   if (checkParams([timeframe, limit])) {
       res.status(401).send('Params missing');
       return;
    }
@@ -142,9 +158,10 @@ const getPopularMeals = async (req, res, next) => {
 }
 
 module.exports = {
-    createMeal,
-    getMeal,
-    updateMeal,
-    deleteMeal,
-    getPopularMeals
+   createMeal,
+   getMeal,
+   getAllMealKits,
+   updateMeal,
+   deleteMeal,
+   getPopularMeals
 }

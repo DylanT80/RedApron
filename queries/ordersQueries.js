@@ -4,6 +4,7 @@ const updateOrderQuery = "UPDATE OrderTable SET %s = $1 WHERE id = (SELECT id FR
 
 const getOrderQuery = "SELECT * FROM OrderTable WHERE id = (SELECT id FROM OrderTable WHERE OrderNumber = $1)";
 const getOrderItemQuery = "SELECT (SELECT sku FROM MealKit WHERE id = mealkitid), quantity FROM OrderItem WHERE orderid = (SELECT id FROM OrderTable WHERE OrderNumber = $1)";
+const getAllOrdersQuery = "SELECT * FROM OrderTable";
 
 const deleteOrderQuery = "DELETE FROM OrderTable WHERE id = (SELECT id FROM OrderTable WHERE OrderNumber = $1)";
 const deleteOrderItemQuery = "DELETE FROM OrderItem WHERE OrderID = (SELECT id FROM OrderTable WHERE OrderNumber = $1)";
@@ -23,6 +24,7 @@ module.exports = {
     createOrderItemQuery,
     getOrderQuery,
     getOrderItemQuery,
+    getAllOrdersQuery,
     updateOrderQuery,
     deleteOrderQuery,
     deleteOrderItemQuery,

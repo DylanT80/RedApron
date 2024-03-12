@@ -5,6 +5,7 @@ const {
     createBatchIngredientQuery,
     getBatchQuery,
     getBatchIngredientQuery,
+    getAllBatchesQuery,
     updateBatchQuery,
     deleteBatchQuery,
     deleteBatchIngredientQuery
@@ -12,6 +13,12 @@ const {
 const { getNumBatchesInIntervalQuery } = require('../queries/highLevelQueries');
 const { updateIngredientQuery, getIngredientQuery } = require('../queries/ingredientsQueries');
 
+/**
+ * @description Create a batch
+ * @route POST /batch
+ * @public
+ * @author Dylan Tran
+ */
 const createBatch = async (req, res, next) => {
     const { BatchNumber, VendorName, Items } = req.body;
 
@@ -29,7 +36,7 @@ const createBatch = async (req, res, next) => {
         Items.forEach(async (item) => {
             const IngredientName = Object.keys(item)[0];
             const Quantity = item[IngredientName];
-            
+
             // Update stock count of ingredients
             const ingredient = await sendQuery(getIngredientQuery, [IngredientName]);
             const formattedQuery = format(updateIngredientQuery, 'CurrentAmount');
@@ -45,6 +52,12 @@ const createBatch = async (req, res, next) => {
     }
 }
 
+/**
+ * @description Get a batch
+ * @route GET /batch
+ * @public
+ * @author Dylan Tran
+ */
 const getBatch = async (req, res, next) => {
     const { batchnumber } = req.query;
 
@@ -68,6 +81,28 @@ const getBatch = async (req, res, next) => {
     }
 }
 
+/**
+ * @description Get list of all batches (get batch history)
+ * @route GET /batch/all
+ * @public
+ * @author Dylan Tran
+ */
+const getAllBatches = async (req, res, next) => {
+    try {
+        const output = await sendQuery(getAllBatchesQuery, []);
+        res.status(201).send(output.rows);
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+}
+
+/**
+ * @description Update a batch
+ * @route PUT /batch
+ * @public
+ * @author Dylan Tran
+ */
 const updateBatch = async (req, res, next) => {
     const { column, value, batchnumber } = req.query;
 
@@ -86,6 +121,12 @@ const updateBatch = async (req, res, next) => {
     }
 }
 
+/**
+ * @description Delete a batch
+ * @route DELETE /batch
+ * @public
+ * @author Dylan Tran
+ */
 const deleteBatch = async (req, res, next) => {
     const { batchnumber } = req.query;
 
@@ -106,6 +147,12 @@ const deleteBatch = async (req, res, next) => {
     }
 }
 
+/**
+ * @description Get all batches
+ * @route GET /batch/all
+ * @public
+ * @author Dylan Tran
+ */
 const getNumBatchesInInterval = async (req, res, next) => {
     const { startDate, endDate } = req.query;
 
@@ -116,7 +163,7 @@ const getNumBatchesInInterval = async (req, res, next) => {
 
     try {
         const output = await sendQuery(getNumBatchesInIntervalQuery, [startDate, endDate]);
-        res.status(200).send({ Count: output.rowCount, Batches: output.rows} );
+        res.status(200).send({ Count: output.rowCount, Batches: output.rows });
     } catch (error) {
         console.error(error);
         next(error);
@@ -126,6 +173,7 @@ const getNumBatchesInInterval = async (req, res, next) => {
 module.exports = {
     createBatch,
     getBatch,
+    getAllBatches,
     updateBatch,
     deleteBatch,
     getNumBatchesInInterval
